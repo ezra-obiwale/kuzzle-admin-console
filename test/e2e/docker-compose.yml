@@ -37,3 +37,32 @@ services:
       - '../../:/var/app'
     depends_on:
       - kuzzle
+
+  firefox:
+    image: selenium/node-firefox-debug:3.14.0-europium
+    ports:
+      - '5900:5900'
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: hub
+
+  chrome:
+    image: selenium/node-chrome-debug:3.14.0-europium
+    ports:
+      - '5901:5900'
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - hub
+    environment:
+      HUB_HOST: hub
+
+  hub:
+    image: selenium/hub:3.14.0-europium
+    ports:
+      - '4444:4444'
+    depends_on:
+      - adminconsole
