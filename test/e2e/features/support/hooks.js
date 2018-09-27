@@ -2,8 +2,9 @@ const { Before, BeforeAll, After, AfterAll } = require('cucumber')
 const fs = require('fs')
 const Kuzzle = require('kuzzle-sdk')
 const path = require('path')
-const puppeteer = require('puppeteer')
 const utils = require('../../utils')
+var wdioElementScreenshot = require('wdio-element-screenshot')
+var webdriverio = require('webdriverio')
 
 const failScreenshotPath = `${__dirname}/../../failed-tests`
 
@@ -47,10 +48,10 @@ BeforeAll(async function() {
 
 Before(async function() {
   this.kuzzle = await instantiateKuzzle(this.kuzzleHostname)
-  this.browser = await puppeteer.launch(this.puppeteerOpts)
-  this.page = await this.browser.newPage()
-  await this.page.setViewport({ width: 1400, height: 900 })
-  await this.page.goto(this.url)
+  this.page = await webdriverio.remote(this.browserOptions).init()
+  // wdioElementScreenshot.init(this.page)
+  await this.page.setViewportSize({ width: 1400, height: 900 })
+  await this.page.url(this.url)
 })
 
 AfterAll(async function() {})
@@ -58,21 +59,19 @@ AfterAll(async function() {})
 After(async function(testCase) {
   // console.log(JSON.stringify(testCase))
   if (testCase.result.status !== 'passed') {
-    const screenshotName = `e2e-fail-${Date.now()}.png`
-    const screenshotPath = path.join(failScreenshotPath, screenshotName)
-
-    await utils.screenshot(this.page, screenshotPath)
-
-    if (process.env.TRAVIS) {
-      await utils.sendToCloudinary(
-        screenshotPath,
-        `admin-console-test-fail-${Date.now()}`,
-        [`travis-${process.env.TRAVIS_BUILD_NUMBER}`]
-      )
-    }
+    // const screenshotName = `e2e-fail-${Date.now()}.png`
+    // const screenshotPath = path.join(failScreenshotPath, screenshotName)
+    // await utils.screenshot(this.page, screenshotPath)
+    // if (process.env.TRAVIS) {
+    //   await utils.sendToCloudinary(
+    //     screenshotPath,
+    //     `admin-console-test-fail-${Date.now()}`,
+    //     [`travis-${process.env.TRAVIS_BUILD_NUMBER}`]
+    //   )
+    // }
   }
   this.kuzzle.disconnect()
-  await this.browser.close()
+  await this.page.end()
 })
 
 // Tagged Hooks

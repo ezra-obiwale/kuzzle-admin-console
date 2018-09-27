@@ -39,7 +39,7 @@ services:
       - kuzzle
 
   firefox:
-    image: selenium/node-firefox-debug:3.14.0-europium
+    image: selenium/node-firefox-debug:3.14.0
     ports:
       - '5900:5900'
     volumes:

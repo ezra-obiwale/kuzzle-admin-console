@@ -38,8 +38,11 @@
     "finalhandler": "^1.1.1",
     "http-server": "^0.11.1",
     "lodash": "^4.17.10",
+    "selenium-webdriver": "^4.0.0-alpha.1",
     "serve-static": "^1.13.2",
     "vue-quill-editor": "^1.1.1",
+    "wdio-element-screenshot": "^1.0.4",
+    "webdriverio": "^4.13.2",
     "why-is-node-running": "^2.0.3"
   },
   "devDependencies": {

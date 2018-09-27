@@ -4,7 +4,8 @@ const utils = require('../../utils')
 const fmt = require('../../../../src/utils').formatForDom
 
 Given('I open the admin console with no environments', async function() {
-  const envCount = await this.page.$$eval(
+  const envCount = await utils.$$eval(
+    this.page,
     '.EnvironmentsSwitch-env',
     envs => envs.length
   )
@@ -22,8 +23,8 @@ When(
 
     await utils.waitForSelector(this.page, '.CreateEnvironment-name')
 
-    await this.page.type('.CreateEnvironment-name', envName)
-    await this.page.type('.CreateEnvironment-host', kuzzleHost)
+    await utils.type(this.page, '.CreateEnvironment-name', envName)
+    await utils.type(this.page, '.CreateEnvironment-host', kuzzleHost)
 
     if (colorIndex) {
       await utils.click(
@@ -46,7 +47,7 @@ When(/I delete the environment called (.*)/, async function(envName) {
   )
 
   await utils.click(this.page, '.EnvironmentDeleteModal-envName')
-  await this.page.type('.EnvironmentDeleteModal-envName', envName)
+  await utils.type(this.page, '.EnvironmentDeleteModal-envName', envName)
   await utils.click(
     this.page,
     'div > #delete-env > .modal-footer > span > .btn'
@@ -89,9 +90,12 @@ Then(
     const screenshotName = 'no-env.create'
     const currentScreenshotPath = utils.getCurrentScreenshotPath(screenshotName)
     await utils.waitForSelector(this.page, '.CreateEnvironmentPage')
-    const createEnvForm = await this.page.$('.CreateEnvironmentPage')
 
-    await utils.screenshot(createEnvForm, currentScreenshotPath)
+    await utils.elementScreenshot(
+      this.page,
+      '.CreateEnvironmentPage',
+      currentScreenshotPath
+    )
     await utils.compareScreenshot(screenshotName)
   }
 )
@@ -108,9 +112,10 @@ Then(
   /I should see that the navbar has the background color (.*)/,
   async function(color) {
     await utils.waitForSelector(this.page, 'nav')
-    const headerColor = await this.page.$eval(
+    const headerColor = await utils.$$eval(
+      this.page,
       'nav',
-      node => node.style.backgroundColor
+      nodes => nodes[0].style.backgroundColor
     )
     expect(headerColor).to.be.eql(color)
   }
