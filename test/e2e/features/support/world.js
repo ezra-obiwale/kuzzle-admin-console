@@ -4,7 +4,7 @@ const { setWorldConstructor, setDefaultTimeout } = require('cucumber')
 function CustomWorld() {
   this.isLocal = process.env.e2eLocal !== undefined
   // this.kuzzleHostname = this.isLocal ? 'localhost' : 'kuzzle'
-  this.kuzzleHostname = 'localhost'
+  this.kuzzleHostname = 'kuzzle'
 
   this.browserOptions = {
     desiredCapabilities: {

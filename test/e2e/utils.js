@@ -150,7 +150,10 @@ const wait = async (page, timeout) => {
 }
 
 const selectorIsNotPresent = async (page, selector, timeout) => {
-  await page.page.waitForExist(selector, timeout || defaultWaitElTimeout, true)
+  if (!page) {
+    throw new Error('click: Please provide a page instance')
+  }
+  await page.waitForExist(selector, timeout || defaultWaitElTimeout, true)
 }
 
 const screenshot = async (page, path) => {
@@ -189,7 +192,7 @@ const $$eval = async (page, selector, script, arg) => {
     return await page.selectorExecute(selector, script, arg)
   } catch (error) {
     throw new Error(
-      `Something went wrong typing into ${selector}. ${error.message}`
+      `Something went executing function into ${selector}. ${error.message}`
     )
   }
 }

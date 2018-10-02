@@ -3,8 +3,8 @@ const fs = require('fs')
 const Kuzzle = require('kuzzle-sdk')
 const path = require('path')
 const utils = require('../../utils')
-var wdioElementScreenshot = require('wdio-element-screenshot')
-var webdriverio = require('webdriverio')
+// var wdioElementScreenshot = require('wdio-element-screenshot')
+// var webdriverio = require('webdriverio')
 
 const failScreenshotPath = `${__dirname}/../../failed-tests`
 
@@ -47,11 +47,9 @@ BeforeAll(async function() {
 })
 
 Before(async function() {
-  this.kuzzle = await instantiateKuzzle(this.kuzzleHostname)
-  this.page = await webdriverio.remote(this.browserOptions).init()
-  // wdioElementScreenshot.init(this.page)
-  await this.page.setViewportSize({ width: 1400, height: 900 })
-  await this.page.url(this.url)
+  this.kuzzle = await instantiateKuzzle('localhost')
+  browser.localStorage('DELETE', 'environments')
+  browser.localStorage('DELETE', 'lastConnectedEnv')
 })
 
 AfterAll(async function() {})
@@ -71,7 +69,7 @@ After(async function(testCase) {
     // }
   }
   this.kuzzle.disconnect()
-  await this.page.end()
+  // await this.page.end()
 })
 
 // Tagged Hooks

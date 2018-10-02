@@ -4,71 +4,64 @@ const utils = require('../../utils')
 const fmt = require('../../../../src/utils').formatForDom
 
 Given('I open the admin console with no environments', async function() {
-  const envCount = await utils.$$eval(
-    this.page,
-    '.EnvironmentsSwitch-env',
-    envs => envs.length
-  )
-  expect(envCount).to.be(0)
+  browser.url('/')
+  await utils.selectorIsNotPresent(browser, '.EnvironmentsSwitch-env')
 })
 
 When(
   /I create a new (in)?valid environment called (\w*)( with color )?(\d?)/,
   async function(invalid, envName, withColor, colorIndex) {
     const kuzzleHost = invalid === 'in' ? 'invalid' : this.kuzzleHostname
-    try {
-      await utils.click(this.page, '.EnvironmentsSwitch > .btn-flat')
-      await utils.click(this.page, '.EnvironmentsSwitch-newConnectionBtn')
-    } catch (error) {}
+    // try {
+    //   await utils.click(browser, '.EnvironmentsSwitch > .btn-flat')
+    //   await utils.click(browser, '.EnvironmentsSwitch-newConnectionBtn')
+    // } catch (error) {}
 
-    await utils.waitForSelector(this.page, '.CreateEnvironment-name')
+    await utils.waitForSelector(browser, '.CreateEnvironment-name')
 
-    await utils.type(this.page, '.CreateEnvironment-name', envName)
-    await utils.type(this.page, '.CreateEnvironment-host', kuzzleHost)
+    await utils.type(browser, '.CreateEnvironment-name', envName)
+    await utils.type(browser, '.CreateEnvironment-host', kuzzleHost)
 
     if (colorIndex) {
       await utils.click(
-        this.page,
+        browser,
         `.CreateEnvironment-colorBtns div:nth-child(${colorIndex}) div.color`
       )
     }
 
-    await utils.click(this.page, '.Environment-SubmitButton')
+    await utils.click(browser, '.Environment-SubmitButton')
   }
 )
 
 When(/I delete the environment called (.*)/, async function(envName) {
-  await utils.click(this.page, '.EnvironmentsSwitch > .btn-flat')
+  await utils.click(browser, '.EnvironmentsSwitch > .btn-flat')
 
-  utils.wait(this.page, 1000)
+  utils.wait(browser, 1000)
   await utils.click(
-    this.page,
+    browser,
     `.EnvironmentsSwitch-env[data-env=env_${fmt(envName)}] > i.fa-trash`
   )
 
-  await utils.click(this.page, '.EnvironmentDeleteModal-envName')
-  await utils.type(this.page, '.EnvironmentDeleteModal-envName', envName)
-  await utils.click(
-    this.page,
-    'div > #delete-env > .modal-footer > span > .btn'
-  )
+  await utils.click(browser, '.EnvironmentDeleteModal-envName')
+  await utils.type(browser, '.EnvironmentDeleteModal-envName', envName)
+  await utils.click(browser, 'div > #delete-env > .modal-footer > span > .btn')
 })
 
 When(/I switch to the (\w*) environment/, async function(envName) {
-  await utils.click(this.page, '.EnvironmentsSwitch > .btn-flat')
+  await utils.click(browser, '.EnvironmentsSwitch > .btn-flat')
 
-  await utils.wait(this.page, 1000)
+  await utils.wait(browser, 1000)
   await utils.click(
-    this.page,
+    browser,
     `.EnvironmentsSwitch-env[data-env=env_${fmt(envName)}]`
   )
 })
 
 Then(/I should see (.*) in the environment dropdown/, async function(envName) {
-  await utils.click(this.page, '.EnvironmentsSwitch > .btn-flat')
+  await utils.click(browser, '.EnvironmentsSwitch > .btn-flat')
 
   await utils.waitForSelector(
-    this.page,
+    browser,
     `.EnvironmentsSwitch-env[data-env="env_${envName}"]`
   )
 })
@@ -76,10 +69,10 @@ Then(/I should see (.*) in the environment dropdown/, async function(envName) {
 Then(/I should not see (.*) in the environment dropdown/, async function(
   envName
 ) {
-  // await utils.click(this.page, '.EnvironmentsSwitch > .btn-flat')
+  // await utils.click(browser, '.EnvironmentsSwitch > .btn-flat')
 
   await utils.selectorIsNotPresent(
-    this.page,
+    browser,
     `.EnvironmentsSwitch-env[data-env="env_${envName}"]`
   )
 })
@@ -89,10 +82,10 @@ Then(
   async function() {
     const screenshotName = 'no-env.create'
     const currentScreenshotPath = utils.getCurrentScreenshotPath(screenshotName)
-    await utils.waitForSelector(this.page, '.CreateEnvironmentPage')
+    await utils.waitForSelector(browser, '.CreateEnvironmentPage')
 
     await utils.elementScreenshot(
-      this.page,
+      browser,
       '.CreateEnvironmentPage',
       currentScreenshotPath
     )
@@ -101,19 +94,19 @@ Then(
 )
 
 Then('I am connected to the selected environment', async function() {
-  await utils.waitForSelector(this.page, '.App-connected', 10000)
+  await utils.waitForSelector(browser, '.App-connected', 10000)
 })
 
 Then('I am not connected to Kuzzle', async function() {
-  await utils.waitForSelector(this.page, '.App-errored', 10000)
+  await utils.waitForSelector(browser, '.App-errored', 10000)
 })
 
 Then(
   /I should see that the navbar has the background color (.*)/,
   async function(color) {
-    await utils.waitForSelector(this.page, 'nav')
+    await utils.waitForSelector(browser, 'nav')
     const headerColor = await utils.$$eval(
-      this.page,
+      browser,
       'nav',
       nodes => nodes[0].style.backgroundColor
     )

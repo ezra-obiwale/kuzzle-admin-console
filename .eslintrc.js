@@ -6,11 +6,9 @@ module.exports = {
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
   extends: 'standard',
   // required to lint *.vue files
-  plugins: [
-    'html'
-  ],
+  plugins: ['html'],
   // add your custom rules here
-  'rules': {
+  rules: {
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // allow functions declarations without space befor the parens
@@ -20,9 +18,10 @@ module.exports = {
     'no-trailing-spaces': 0
   },
   globals: {
-    'window': false,
-    'localStorage': false,
-    '$': false,
-    'JSON': false
+    window: false,
+    localStorage: false,
+    $: false,
+    JSON: false,
+    browser: true
   }
 }

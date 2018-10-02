@@ -36,7 +36,7 @@
 
       </div>
 
-      <span slot="footer">
+      <template slot="footer">
         <button
           type="submit"
           href="#!"
@@ -49,7 +49,7 @@
           @click.prevent="close">
             Cancel
         </button>
-      </span>
+      </template>
     </modal>
   </form>
 </template>

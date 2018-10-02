@@ -1,10 +1,18 @@
-const { When, Then } = require('cucumber')
+const { Given, When, Then } = require('cucumber')
 const utils = require('../../utils')
 
+Given('I open the admin console', () => {
+  browser.url('/')
+  browser.setViewportSize({
+    width: 1400,
+    height: 900
+  })
+})
+
 When('I login as anonymous', async function() {
-  await utils.click(this.page, '.LoginAsAnonymous-Btn')
+  await utils.click(browser, '.LoginAsAnonymous-Btn')
 })
 
 Then('I am logged in', async function() {
-  await utils.waitForSelector(this.page, '.App-loggedIn')
+  await utils.waitForSelector(browser, '.App-loggedIn')
 })
